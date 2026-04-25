@@ -1,15 +1,13 @@
 package org.cslt.peliculas_app.controllers;
 
 import org.cslt.peliculas_app.models.Pelicula;
-import org.cslt.peliculas_app.repositories.PeliculaRepository;
-import org.cslt.peliculas_app.services.PeliculaService;
+
 import org.cslt.peliculas_app.services.PeliculaServiceImpl;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -18,7 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.sql.Date;
-import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,7 +51,6 @@ public class PeliculaControllerTest {
                 .contentType("application/json")
                 .content("{\"titulo\":\"Titulo\",\"director\":\"Director\",\"genero\":\"Genero\",\"sinopsis\":\"Sinopsis\",\"fecha_estreno\":\"2024-01-01\"}"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-
     }
 
     @Test
