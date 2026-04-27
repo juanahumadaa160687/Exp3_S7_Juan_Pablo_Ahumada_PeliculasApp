@@ -1,6 +1,5 @@
 package org.cslt.peliculas_app.services;
 
-import lombok.Setter;
 import org.cslt.peliculas_app.models.Pelicula;
 import org.cslt.peliculas_app.repositories.PeliculaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,7 @@ public class PeliculaServiceImpl implements PeliculaService {
 
     @Override
     public Pelicula getPeliculaById(Long id) {
+
         return peliculaRepository.findById(id).orElse(null);
     }
 
@@ -31,14 +31,9 @@ public class PeliculaServiceImpl implements PeliculaService {
 
     @Override
     public Pelicula updatePelicula(Long id, Pelicula pelicula) {
-        Pelicula existingPelicula = peliculaRepository.findById(id).orElse(null);
-        if (existingPelicula != null) {
-            existingPelicula.setTitulo(pelicula.getTitulo());
-            existingPelicula.setDirector(pelicula.getDirector());
-            existingPelicula.setSinopsis(pelicula.getSinopsis());
-            existingPelicula.setGenero(pelicula.getGenero());
-            existingPelicula.setFecha_estreno(pelicula.getFecha_estreno());
-            return peliculaRepository.save(existingPelicula);
+        if(peliculaRepository.existsById(id)) {
+            pelicula.setId(id);
+            return peliculaRepository.save(pelicula);
         }
         return null;
     }

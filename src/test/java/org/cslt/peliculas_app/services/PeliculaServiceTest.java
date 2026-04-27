@@ -9,14 +9,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Date;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PeliculaServiceTest {
@@ -40,60 +39,54 @@ public class PeliculaServiceTest {
         pelicula.setFecha_estreno(Date.valueOf("2024-01-01"));
     }
 
-
-    @Test
-    @DisplayName("Test Create Pelicula")
-    public void savePelicula() {
-        when(peliculaRepository.save(any())).thenReturn(pelicula);
-
-        Pelicula savedPelicula = peliculaServiceMock.createPelicula(pelicula);
-
-        assertNotNull(savedPelicula);
-        assertEquals(pelicula.getTitulo(), savedPelicula.getTitulo());
-        assertEquals(pelicula.getDirector(), savedPelicula.getDirector());
-    }
-
     @Test
     @DisplayName("Test Get All Peliculas")
-    public void getAllPeliculas() {
+    public void testGetAllPeliculas() {
+        List<Pelicula> mockPeliculas = Arrays.asList(pelicula);
+        when(peliculaRepository.findAll()).thenReturn(mockPeliculas);
 
-        List<Pelicula> peliculasList = new ArrayList<>();
-
-        when(peliculaRepository.findAll()).thenReturn(peliculasList);
-
-        assertEquals(peliculasList, peliculaServiceMock.getAllPeliculas());
-
+        assertEquals(mockPeliculas, peliculaServiceMock.getAllPeliculas());
     }
 
     @Test
     @DisplayName("Test Get Pelicula By Id")
-    public void getPeliculaById() {
+    public void testGetPeliculaById() {
+        when(peliculaRepository.findById(1L)).thenReturn(Optional.of(pelicula));
 
-        when(peliculaRepository.findById(any())).thenReturn(Optional.of(pelicula));
+        assertEquals(pelicula, peliculaServiceMock.getPeliculaById(1L));
+    }
 
-        Pelicula resultado = peliculaServiceMock.getPeliculaById(pelicula.getId());
+    @Test
+    @DisplayName("Test Create Pelicula")
+    public void testCreatePelicula() {
+        when(peliculaRepository.save(any(Pelicula.class))).thenReturn(pelicula);
 
-        assertNotNull(resultado);
-        assertEquals(pelicula,  peliculaServiceMock.getPeliculaById(pelicula.getId()));
-
+        assertEquals(pelicula, peliculaServiceMock.createPelicula(pelicula));
     }
 
     @Test
     @DisplayName("Test Update Pelicula")
-    public void updatePelicula() {
-
+    public void testUpdatePelicula() {
         when(peliculaRepository.existsById(1L)).thenReturn(true);
         when(peliculaRepository.save(pelicula)).thenReturn(pelicula);
-        Pelicula peli =  peliculaServiceMock.updatePelicula(1L, pelicula);
-        assertEquals(1L, pelicula.getId());
-        assertEquals(pelicula, peli);
-        verify(peliculaRepository).save(pelicula);
 
+        Pelicula mockPelicula = peliculaServiceMock.updatePelicula(1L, pelicula);
+
+        assertEquals(1L, mockPelicula.getId());
+    }
+
+    @Test
+    @DisplayName("Test Update Pelicula Not Found")
+    public void testUpdatePeliculaNotFound() {
+        when(peliculaRepository.existsById(1L)).thenReturn(false);
+        assertNull(peliculaServiceMock.updatePelicula(1L, pelicula));
+        verify(peliculaRepository, never()).save(any(Pelicula.class));
     }
 
     @Test
     @DisplayName("Test Delete Pelicula")
-    public void deletePelicula() {
+    public void testDeletePelicula() {
+        when(peliculaRepository.existsById(1L)).thenReturn(true);
         peliculaServiceMock.deletePelicula(1L);
         verify(peliculaRepository).deleteById(1L);
     }

@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.hateoas.RepresentationModel;
 
 import java.sql.Date;
 
@@ -17,7 +16,7 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Pelicula extends RepresentationModel<Pelicula> {
+public class Pelicula {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
